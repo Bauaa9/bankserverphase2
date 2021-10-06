@@ -1,4 +1,4 @@
-package com.slytherin.project.service;
+package com.slytherin.project.bank.service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,13 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.slytherin.project.dao.CarddetailsRepo;
-import com.slytherin.project.dao.CardlimitRepo;
-import com.slytherin.project.dao.TransactionDao;
-import com.slytherin.project.model.ModelCardlimit;
-import com.slytherin.project.model.ModelInputCardDetails;
-import com.slytherin.project.model.ModelSavedCardDetails;
-import com.slytherin.project.model.ModelTransaction;
+
+import com.slytherin.project.bank.dao.CarddetailsRepo;
+import com.slytherin.project.bank.dao.CardlimitRepo;
+import com.slytherin.project.bank.dao.TransactionDao;
+import com.slytherin.project.bank.model.ModelCardlimit;
+import com.slytherin.project.bank.model.ModelInputCardDetails;
+import com.slytherin.project.bank.model.ModelSavedCardDetails;
+import com.slytherin.project.bank.model.ModelTransaction;
 
 
 @Service

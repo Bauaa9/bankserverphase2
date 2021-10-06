@@ -1,10 +1,10 @@
-package com.slytherin.project.dao;
+package com.slytherin.project.bank.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.slytherin.project.model.ModelCardlimit;
+import com.slytherin.project.bank.model.ModelCardlimit;
 
 
 @Repository

@@ -1,4 +1,4 @@
-package com.slytherin.project.model;
+package com.slytherin.project.bank.model;
 
 import java.time.LocalDateTime;
 
@@ -25,17 +25,17 @@ public class ModelTransaction {
 	String merchant_name;
 	
 	@Column
-	float expenditure;
+	float amount;
 
 	@Column
-	float pg_ref_id;
+	String pg_ref_id;
 	
 	
-	public float getPg_ref_id() {
+	public String getPg_ref_id() {
 		return pg_ref_id;
 	}
 
-	public void setPg_ref_id(float pg_ref_id) {
+	public void setPg_ref_id(String pg_ref_id) {
 		this.pg_ref_id = pg_ref_id;
 	}
 
@@ -45,14 +45,14 @@ public class ModelTransaction {
 
 
 	public ModelTransaction(int trs_id, String status, LocalDateTime date_time, String payment_method,
-			String merchant_name, float expenditure, float pg_ref_id) {
+			String merchant_name, float expenditure, String pg_ref_id) {
 		super();
 		this.trs_id = trs_id;
 		this.status = status;
 		this.date_time = date_time;
 		this.payment_method = payment_method;
 		this.merchant_name = merchant_name;
-		this.expenditure = expenditure;
+		this.amount = expenditure;
 		this.pg_ref_id = pg_ref_id;
 	}
 
@@ -97,11 +97,11 @@ public class ModelTransaction {
 	}
 
 	public float getExpenditure() {
-		return expenditure;
+		return amount;
 	}
 
 	public void setExpenditure(float expenditure) {
-		this.expenditure = expenditure;
+		this.amount = expenditure;
 	}
 	
 }

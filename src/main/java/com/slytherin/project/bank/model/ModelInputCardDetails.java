@@ -1,4 +1,4 @@
-package com.slytherin.project.model;
+package com.slytherin.project.bank.model;
 
 public class ModelInputCardDetails {
 	

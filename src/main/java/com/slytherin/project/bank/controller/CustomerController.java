@@ -1,4 +1,4 @@
-package com.slytherin.project.controller;
+package com.slytherin.project.bank.controller;
 
 import java.util.Map;
 
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.slytherin.project.model.ModelInputCardDetails;
-import com.slytherin.project.model.ModelSavedCardDetails;
-import com.slytherin.project.service.CustomerService;
+import com.slytherin.project.bank.model.ModelInputCardDetails;
+import com.slytherin.project.bank.model.ModelSavedCardDetails;
+import com.slytherin.project.bank.service.CustomerService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -28,25 +28,25 @@ public class CustomerController {
 	@Autowired
 	CustomerService service;
 
-	@PostMapping("/creditdetails")
-	public ResponseEntity<?> cardinfo(@RequestBody ModelInputCardDetails modelInputCardDetails) {
+	@PostMapping("/bank-creditdetails")
+	public Map<String, Object> cardinfo(@RequestBody ModelInputCardDetails modelInputCardDetails) {
 		Map<String, Object> map = service.creditcarddetails(modelInputCardDetails);
-		return ResponseEntity.ok(map);
+		return map;
 	}
 
-	@PostMapping("/unbilled-transactions")
+	@PostMapping("/bank-unbilled-txn")
 	public ResponseEntity<?> getUnbilledTrans(@RequestBody ModelInputCardDetails modelInputCardDetails) {
 		Map<String, Object> map = service.getUnbilledTxn(modelInputCardDetails);
 		return ResponseEntity.ok(map);
 	}
 
-	@PostMapping("/billed-transactions")
+	@PostMapping("/bank-billed-txn")
 	public ResponseEntity<?> getBilledTrans(@RequestBody ModelInputCardDetails modelInputCardDetails) {
 		Map<String, Object> map = service.getBilledTxn(modelInputCardDetails);
 		return ResponseEntity.ok(map);
 	}
 
-	@PostMapping("/retail-transactions")
+	@PostMapping("/bank-retail-txn")
 	public ResponseEntity<?> getRetailTransactions(@RequestBody ModelInputCardDetails modelInputCardDetails) {
 		Map<String, Object> map = service.getRetailTxn(modelInputCardDetails);
 		return ResponseEntity.ok(map);

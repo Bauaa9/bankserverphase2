@@ -1,4 +1,4 @@
-package com.slytherin.project.model;
+package com.slytherin.project.bank.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;

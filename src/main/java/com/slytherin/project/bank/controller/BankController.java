@@ -66,6 +66,7 @@ public class BankController {
 			LOG.info("OTP data received");
 			return service.verifyAndProcessPayment(otpData);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went wrong. Try again later",
 					e);
 		}

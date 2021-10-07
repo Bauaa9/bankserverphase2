@@ -13,4 +13,9 @@ public interface CardlimitRepo extends JpaRepository<ModelCardlimit, Integer> {
 	@Query(value="select * from card_limit_details where card_token=?1", nativeQuery=true)
 	public ModelCardlimit findLimit(int id);
 
+	@Query(value="select available_credit_limit from card_limit_details where card_token=?1", nativeQuery=true)
+	public String getLimitAmount(int txnId);
+	
+	
+
 }

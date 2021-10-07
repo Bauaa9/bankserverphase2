@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.slytherin.project.bank.dao.CardRepository;
+import com.slytherin.project.bank.dao.CardlimitRepo;
 import com.slytherin.project.bank.dao.OTPStoreRepository;
 import com.slytherin.project.bank.dao.TransRepository;
 import com.slytherin.project.bank.model.CardDetails;
@@ -49,6 +50,9 @@ public class BankService {
 	@Autowired
 	OTPStoreRepository otpRepository;
 
+	@Autowired
+	CardlimitRepo cardlimitRepo;
+	
 	@Autowired
 	private Environment env;
 
@@ -208,19 +212,21 @@ public class BankService {
 
 		Transactions ongoingTransaction = new Transactions();
 		ongoingTransaction = transRepository.findById(otpData.getTxnId()).get();
-		
+		System.out.println(ongoingTransaction.getCard_id());
+		Integer availableLimitAmount =Integer.parseInt(cardlimitRepo.getLimitAmount(ongoingTransaction.getCard_id()))   ;
 		FinalResult result = new FinalResult();
 		result.setPgRefId(ongoingTransaction.getPgRefId());
 		
-		if (otpReceivedFromUser.equals(otpInDb) && (timeDiff < 300000)) {
-			
+		if (otpReceivedFromUser.equals(otpInDb) && (timeDiff < 300000) && (otpData.getTotalAmt() <= availableLimitAmount)) {
 			result.setStatus("completed");
 			ongoingTransaction.setStatus("completed");
+			transRepository.save(ongoingTransaction);
 			return ResponseEntity.status(HttpStatus.OK).body(result);
 		} else {
 			
 			result.setStatus("failed");
 			ongoingTransaction.setStatus("failed");
+			transRepository.save(ongoingTransaction);
 			return ResponseEntity.status(HttpStatus.OK).body(result);
 		}
 	}

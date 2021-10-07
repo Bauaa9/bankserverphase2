@@ -30,6 +30,7 @@ public class CustomerService {
 
 		CardDetails obj = repoCardDetails.findCard(modelInputCardDetails.getUserId(),
 				modelInputCardDetails.getCardId());
+		System.out.println(obj.getId());
 		ModelCardlimit obj1 = repoCardLimitDetails.findLimit(obj.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
 		double totaloutstanding = Double.valueOf(obj1.getTotalcreditlimit())

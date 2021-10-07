@@ -1,19 +1,9 @@
 package com.slytherin.project.bank.service;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-import java.util.Arrays;
-import java.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.slytherin.project.bank.dao.CarddetailsRepo;
 import com.slytherin.project.bank.dao.CardlimitRepo;

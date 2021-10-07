@@ -18,11 +18,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.slytherin.project.bank.model.CardDetails;
 import com.slytherin.project.bank.model.FinalResult;
+import com.slytherin.project.bank.model.OTPRequest;
 import com.slytherin.project.bank.model.OtpData;
 import com.slytherin.project.bank.model.PaymentDetails;
 import com.slytherin.project.bank.service.BankService;
-
-
 
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
@@ -38,25 +37,27 @@ public class BankController {
 
 		try {
 			CardDetails checkCard = service.getCardDetails(paymentDetails.getCardNumber());
+			System.out.println(checkCard.toString());
 			ResponseEntity<Map<String, String>> result = service.checkCardDetails(checkCard, paymentDetails);
 			return result;
 		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went wrong. Try again later", e);
+			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went wrong. Try again later",
+					e);
 		}
 	}
 
-	@GetMapping("/generate-otp")
-	public boolean generateOtp(@RequestParam("txnId") String txnId, @RequestParam("cardnum") String cardnum) {
+	@PostMapping("/generate-otp")
+	public boolean generateOtp(@RequestBody OTPRequest otpRequest) {
 		try {
 			int otp = service.generateOtp();
-			service.sendMail(otp, cardnum);
-			service.storeOTP(otp, Integer.parseInt(txnId));
+			service.sendMail(otp, otpRequest.getCardNumber());
+			service.storeOTP(otp, otpRequest.getTxnId());
 			return true;
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			return false;
 		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went wrong. Try again later", e);
+			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went wrong. Try again later",
+					e);
 		}
 	}
 
@@ -66,7 +67,8 @@ public class BankController {
 			LOG.info("OTP data received");
 			return service.verifyAndProcessPayment(otpData);
 		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went wrong. Try again later", e);
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went wrong. Try again later",
+					e);
 		}
 
 	}

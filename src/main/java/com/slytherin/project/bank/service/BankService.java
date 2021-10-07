@@ -24,6 +24,7 @@ import com.slytherin.project.bank.dao.OTPStoreRepository;
 import com.slytherin.project.bank.dao.TransRepository;
 import com.slytherin.project.bank.model.CardDetails;
 import com.slytherin.project.bank.model.FinalResult;
+import com.slytherin.project.bank.model.OTPRequest;
 import com.slytherin.project.bank.model.OTPStore;
 import com.slytherin.project.bank.model.OtpData;
 import com.slytherin.project.bank.model.PaymentDetails;
@@ -65,6 +66,8 @@ public class BankService {
 
 	public ResponseEntity<Map<String, String>> checkCardDetails(CardDetails checkCard, PaymentDetails paymentDetails) throws Exception{
 		ArrayList<String> err = new ArrayList<String>();
+		System.out.println(paymentDetails.toString());
+		System.out.println(checkCard.toString());
 		boolean isAllDataValid = true;
 		if (checkCard != null) {
 			if (!checkCard.getCardType().equals(paymentDetails.getCardType())) {
@@ -90,11 +93,12 @@ public class BankService {
 
 			if (isAllDataValid == true) {
 				String generateOtpURL = env.getProperty("generateOtpUrl").toString();
-				String url = generateOtpURL + "?txnId=" + getTxnId() + "&cardnum=" + paymentDetails.getCardNumber();
+				String url = generateOtpURL;
 				System.out.println(url);
 
 				RestTemplate template = new RestTemplate();
-				boolean response = template.getForObject(url, boolean.class);
+//				boolean response = template.getForObject(url, boolean.class);
+				boolean response = template.postForObject(url,new OTPRequest(getTxnId(),paymentDetails.getCardNumber()), boolean.class);
 
 				if (response) {
 					LOG.info("OTP generated");
@@ -165,7 +169,9 @@ public class BankService {
 
 	/// check this
 	public void sendMail(int otp, String cardnum) throws Exception{
+		System.out.println(cardnum + "in email function");
 		String email = cardRepository.findEmailId(cardnum);
+		System.out.println(email);
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setFrom("groupslytherin@gmail.com");
 		message.setTo(email);
@@ -179,7 +185,7 @@ public class BankService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 		String currentTime = time.format(formatter);
 		OTPStore otpStore = new OTPStore(txnId, otp, currentTime);
-		otpRepository.save(otpStore);
+		otpRepository.insertIntoOTP(txnId, otp, currentTime);
 	}
 
 	public OTPStore getOTP(int txnId) throws Exception{

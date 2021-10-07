@@ -6,15 +6,15 @@ import javax.persistence.Id;
 
 /** @Author Shreyas Purkar */
 
-@Entity(name = "carddetails")
+@Entity(name = "card_details")
 public class CardDetails {
 
 	@Id
-	@Column(name = "card_id")
+	@Column(name = "card_token")
 	int id;
 	@Column(name = "card_number")
 	String cardNumber;
-	@Column(name = "card_holdere_name")
+	@Column(name = "card_holder_name")
 	String cardHolderName;
 	@Column(name = "cvv")
 	String cvv;
@@ -22,14 +22,26 @@ public class CardDetails {
 	String expiryDate;
 	@Column(name = "card_type")
 	String cardType;
+	@Column(name = "customer_details_id")
+	int customer_detail_id;
+	
+
+	public int getCustomer_detail_id() {
+		return customer_detail_id;
+	}
+
+	public void setCustomer_detail_id(int customer_detail_id) {
+		this.customer_detail_id = customer_detail_id;
+	}
 
 	public CardDetails() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public CardDetails(int id, String cardNumber, String cardHolderName, String cvv, String expiryDate,
-			String cardType) {
+
+	public CardDetails(int id, String cardNumber, String cardHolderName, String cvv, String expiryDate, String cardType,
+			int customer_detail_id) {
 		super();
 		this.id = id;
 		this.cardNumber = cardNumber;
@@ -37,6 +49,7 @@ public class CardDetails {
 		this.cvv = cvv;
 		this.expiryDate = expiryDate;
 		this.cardType = cardType;
+		this.customer_detail_id = customer_detail_id;
 	}
 
 	public int getId() {

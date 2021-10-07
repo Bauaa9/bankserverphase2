@@ -15,7 +15,7 @@ public class OTPStore {
 	int txnId;
 	@Column(name="otp")
 	int otp;
-	@Column(name="current_time")
+	@Column(name="date_time")
 	String currentTime;
 	
 	public OTPStore() {

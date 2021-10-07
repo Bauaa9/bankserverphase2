@@ -51,11 +51,10 @@ public class BankController {
 	public boolean generateOtp(@RequestBody OTPRequest otpRequest) {
 		try {
 			int otp = service.generateOtp();
-//			service.sendMail(otp, otpRequest.getCardNumber());
+			service.sendMail(otp, otpRequest.getCardNumber());
 			service.storeOTP(otp, otpRequest.getTxnId());
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went wrong. Try again later",
 					e);
 		}

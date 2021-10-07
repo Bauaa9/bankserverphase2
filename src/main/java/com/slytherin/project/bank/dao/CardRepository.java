@@ -14,7 +14,7 @@ public interface CardRepository extends JpaRepository<CardDetails, Integer> {
 	@Query(value = "SELECT email FROM customerdetails inner join card_details on card_details.customer_details_id=customerdetails.customer_detail_id WHERE card_details.card_number=?1", nativeQuery = true)
 	public String findEmailId(String cardnum);
 	
-	@Query(value = "SELECT customer_detail_id  FROM customerdetails inner join card_details WHERE card_details.card_id=?1", nativeQuery = true)
+	@Query(value = "SELECT customer_detail_id  FROM customerdetails inner join card_details WHERE card_details.card_token=?1", nativeQuery = true)
 	public int findCustomerById(int id);
 
 }

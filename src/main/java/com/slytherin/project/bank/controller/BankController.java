@@ -51,7 +51,7 @@ public class BankController {
 	public boolean generateOtp(@RequestBody OTPRequest otpRequest) {
 		try {
 			int otp = service.generateOtp();
-			service.sendMail(otp, otpRequest.getCardNumber());
+//			service.sendMail(otp, otpRequest.getCardNumber());
 			service.storeOTP(otp, otpRequest.getTxnId());
 			return true;
 		} catch (Exception e) {

@@ -185,7 +185,7 @@ public class BankService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 		String currentTime = time.format(formatter);
 		OTPStore otpStore = new OTPStore(txnId, otp, currentTime);
-		otpRepository.insertIntoOTP(txnId, otp, currentTime);
+		otpRepository.save(otpStore);
 	}
 
 	public OTPStore getOTP(int txnId) throws Exception{

@@ -7,16 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "otp_store")
+@Entity(name="otp_store")
 public class OTPStore {
 	
 	@Id
-	@Column(name = "txn_id")
+	@Column(name="txn_id")
 	int txnId;
-	@Column(name = "otp")
+	@Column(name="otp")
 	int otp;
-	@Column(name = "current_time")
+	@Column(name="current_time")
 	String currentTime;
 	
 	public OTPStore() {

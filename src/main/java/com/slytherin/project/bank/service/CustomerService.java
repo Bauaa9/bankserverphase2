@@ -18,6 +18,7 @@ import com.slytherin.project.bank.dao.CarddetailsRepo;
 import com.slytherin.project.bank.dao.CardlimitRepo;
 import com.slytherin.project.bank.dao.TransactionDao;
 import com.slytherin.project.bank.model.CardDetails;
+import com.slytherin.project.bank.model.ModelCard;
 import com.slytherin.project.bank.model.ModelCardlimit;
 import com.slytherin.project.bank.model.ModelInputCardDetails;
 import com.slytherin.project.bank.model.ModelTransaction;
@@ -34,10 +35,11 @@ public class CustomerService {
 	@Autowired
 	TransactionDao transactionDao;
 	
+	
 	private static SecretKeySpec secretKey;
 	private static byte[] key;
 	private static final String ALGORITHM = "AES";
-	private String secretkey = "slytherinNew";
+	private String secretkey = "slytherinNew1";
 	
 	public void prepareSecreteKey(String myKey) throws Exception {
 		MessageDigest sha = null;
@@ -63,9 +65,9 @@ public class CustomerService {
 		
 		CardDetails obj = repoCardDetails.findCard(modelInputCardDetails.getUserId(),
 				modelInputCardDetails.getCardId());
-		System.out.println(obj.getId());		
-		obj.setCardNumber(decrypt(obj.getCardNumber(),secretkey));
-		System.out.println("decrpyt"+obj.getCardNumber());
+		System.out.println(obj.getId());
+		ModelCard modelCard = new ModelCard();
+		obj.setCardNumber(modelCard.getCardNumber());
 		ModelCardlimit obj1 = repoCardLimitDetails.findLimit(obj.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
 		double totaloutstanding = Double.valueOf(obj1.getTotalcreditlimit())

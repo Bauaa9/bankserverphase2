@@ -33,4 +33,11 @@ public interface TransactionDao extends JpaRepository<ModelTransaction, Integer>
 	
 	@Query(value="select trs_id,status,payment_method,merchant_name,date_time,amount,pg_ref_id from transactions", nativeQuery=true)
 	public List<ModelTransaction> findRetailTransactions();
+	
+	@Query(value="select sum(amount) from transactions where (Date(date_time) < ?1) and payment_method='credit'", nativeQuery=true)
+	public Float getTotalCreditAmount(String lastStmtDate,String nextStmtDate);
+	
+	@Query(value="select sum(amount) from transactions where (Date(date_time) < ?1) and payment_method='debit'", nativeQuery=true)
+	public Float getTotalDeditAmount(String lastStmtDate,String nextStmtDate);
+	
 }

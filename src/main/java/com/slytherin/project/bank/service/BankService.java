@@ -25,6 +25,7 @@ import com.slytherin.project.bank.dao.OTPStoreRepository;
 import com.slytherin.project.bank.dao.TransRepository;
 import com.slytherin.project.bank.model.CardDetails;
 import com.slytherin.project.bank.model.FinalResult;
+import com.slytherin.project.bank.model.ModelCardlimit;
 import com.slytherin.project.bank.model.OTPRequest;
 import com.slytherin.project.bank.model.OTPStore;
 import com.slytherin.project.bank.model.OtpData;
@@ -58,6 +59,9 @@ public class BankService {
 
 	@Autowired
 	JavaMailSender javaMailSender;
+	
+	@Autowired
+	CardlimitRepo cardLimit;
 
 	public CardDetails getCardDetails(String string) throws Exception{
 		return this.cardRepository.findCardDetails(string);
@@ -147,7 +151,7 @@ public class BankService {
 		int customerId = cardRepository.findCustomerById(checkCard.getId());
 		
 		LocalTime time = LocalTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String currentTime = time.format(formatter);
 		
 		newTransaction.setAmount(paymentDetails.getTotalAmt());
@@ -213,14 +217,37 @@ public class BankService {
 		Transactions ongoingTransaction = new Transactions();
 		ongoingTransaction = transRepository.findById(otpData.getTxnId()).get();
 		System.out.println(ongoingTransaction.getCard_id());
-		Integer availableLimitAmount =Integer.parseInt(cardlimitRepo.getLimitAmount(ongoingTransaction.getCard_id()))   ;
+		Float availableLimitAmount =Float.parseFloat(cardlimitRepo.getLimitAmount(ongoingTransaction.getCard_id()))   ;
 		FinalResult result = new FinalResult();
 		result.setPgRefId(ongoingTransaction.getPgRefId());
+		int card_id = ongoingTransaction.getCard_id();
+		ModelCardlimit ongoingCard = cardLimit.findLimit(card_id);
+		
+		ModelCardlimit toPayCarddetail = cardLimit.findLimit(otpData.getCardIdToPay());
 		
 		if (otpReceivedFromUser.equals(otpInDb) && (timeDiff < 300000) && (otpData.getTotalAmt() <= availableLimitAmount)) {
 			result.setStatus("completed");
 			ongoingTransaction.setStatus("completed");
+			Float newCreditLimit = Float.parseFloat(ongoingCard.getAvailablecreditlimit())  - otpData.getTotalAmt();
+			ongoingCard.setAvailablecreditlimit(String.valueOf(newCreditLimit)); 
+			cardLimit.save(ongoingCard);
+			toPayCarddetail.setAvailablecreditlimit(String.valueOf(newCreditLimit));
+			cardLimit.save(toPayCarddetail);
 			transRepository.save(ongoingTransaction);
+			
+			Transactions newTransaction = new Transactions();
+			int customerId = cardRepository.findCustomerById(otpData.getCardIdToPay());
+			
+			newTransaction.setAmount(otpData.getTotalAmt());
+			newTransaction.setCard_id(otpData.getCardIdToPay());
+			newTransaction.setCustomerId(customerId);
+			newTransaction.setDateTime(currentTime);
+			newTransaction.setMerchantName("Self");
+			newTransaction.setPaymentMethod("credit");
+			newTransaction.setPgRefId("na");
+			newTransaction.setStatus("Completed");
+			newTransaction.setTrsId(getTxnId());
+			transRepository.save(newTransaction);
 			return ResponseEntity.status(HttpStatus.OK).body(result);
 		} else {
 			

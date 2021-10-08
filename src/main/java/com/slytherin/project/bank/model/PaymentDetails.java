@@ -12,11 +12,14 @@ public class PaymentDetails {
 	String merchantName;
 	String paymentMethod;
 	
+	
 	public PaymentDetails()
 	{
 		
 	}
 	
+	
+
 	public PaymentDetails(String cardType, String cardNumber, String cvv, String holderName, String expDate,
 			Float totalAmt, String pgRefId, String merchantName, String paymentMethod) {
 		super();

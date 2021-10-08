@@ -4,14 +4,24 @@ public class OtpData {
 	int txnId;
 	String otp;
 	float totalAmt;
+	int cardIdToPay;
+	
+	
+	public int getCardIdToPay() {
+		return cardIdToPay;
+	}
+	public void setCardIdToPay(int cardIdToPay) {
+		this.cardIdToPay = cardIdToPay;
+	}
 	public OtpData() {
 		// TODO Auto-generated constructor stub
 	}
-	public OtpData(int txnId, String otp, float totalAmt) {
+	public OtpData(int txnId, String otp, float totalAmt,int cardIdToPay) {
 		super();
 		this.txnId = txnId;
 		this.otp = otp;
 		this.totalAmt = totalAmt;
+		this.cardIdToPay=cardIdToPay;
 	}
 	public int getTxnId() {
 		return txnId;

@@ -27,6 +27,7 @@ public class CustomerController {
 			Map<String, Object> map = service.creditcarddetails(modelInputCardDetails);
 			return map;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went wrong. Try again later", e);
 		}
 	}

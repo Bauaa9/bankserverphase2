@@ -37,7 +37,7 @@ public class CustomerService {
 	private static SecretKeySpec secretKey;
 	private static byte[] key;
 	private static final String ALGORITHM = "AES";
-	private String secretkey = "slytherin";
+	private String secretkey = "slytherinNew";
 	
 	public void prepareSecreteKey(String myKey) throws Exception {
 		MessageDigest sha = null;
@@ -60,11 +60,12 @@ public class CustomerService {
 	}
 
 	public Map<String, Object> creditcarddetails(ModelInputCardDetails modelInputCardDetails) throws Exception{
-
+		
 		CardDetails obj = repoCardDetails.findCard(modelInputCardDetails.getUserId(),
 				modelInputCardDetails.getCardId());
-		System.out.println(obj.getId());
+		System.out.println(obj.getId());		
 		obj.setCardNumber(decrypt(obj.getCardNumber(),secretkey));
+		System.out.println("decrpyt"+obj.getCardNumber());
 		ModelCardlimit obj1 = repoCardLimitDetails.findLimit(obj.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
 		double totaloutstanding = Double.valueOf(obj1.getTotalcreditlimit())

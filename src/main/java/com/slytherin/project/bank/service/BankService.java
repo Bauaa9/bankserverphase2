@@ -236,7 +236,15 @@ public class BankService {
 			Float newCreditLimit = Float.parseFloat(ongoingCard.getAvailablecreditlimit())  - otpData.getTotalAmt();
 			ongoingCard.setAvailablecreditlimit(String.valueOf(newCreditLimit)); 
 			cardLimit.save(ongoingCard);
-			toPayCarddetail.setAvailablecreditlimit(String.valueOf(newCreditLimit));
+			
+			Float previousBillAmount=toPayCarddetail.getPreviousBill();
+			toPayCarddetail.setPreviousBill(previousBillAmount-otpData.getTotalAmt());
+			
+			
+			  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+			   LocalDateTime now = LocalDateTime.now();  
+			ongoingTransaction.setDateTime(dtf.format(now));
+			
 			cardLimit.save(toPayCarddetail);
 			transRepository.save(ongoingTransaction);
 			

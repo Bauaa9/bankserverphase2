@@ -79,7 +79,7 @@ public class BankCustomerService {
 				- Double.valueOf(obj1.getAvailablecreditlimit());
 //		System.out.println(totaloutstanding );
 		map.put("unbilledTxn", modelTransaction);
-		map.put("totalOutstandingAmount",totaloutstanding  );
+		map.put("totalOutstandingAmount",totaloutstanding);
 		return map;
 
 	}
@@ -97,10 +97,10 @@ public class BankCustomerService {
 				previousStatementDate);
 		Map<String, Object> map = new HashMap<String, Object>();
 		Float totalAmountDue = transactionDao.getTotalAmountDue(obj1.getLaststatementdate(), previousStatementDate);
-		totalAmountDue = transactionDao.getTotalDeditAmount(obj1.getLaststatementdate(),previousStatementDate)-transactionDao.getTotalCreditAmount(obj1.getLaststatementdate(), previousStatementDate);
+		totalAmountDue = obj1.getPreviousBill();
 		map.put("billedTxn", modelTransaction);
-		map.put("totalAmountDue", transactionDao.getTotalDeditAmount(obj1.getLaststatementdate(),previousStatementDate)-transactionDao.getTotalCreditAmount(obj1.getLaststatementdate(), previousStatementDate));
-		map.put("minAmountDue", (int) (totalAmountDue / 10));
+		map.put("totalAmountDue", obj1.getPreviousBill());
+		map.put("minAmountDue", (int) (totalAmountDue / obj1.getMinDuePercent()));
 		return map;
 	}
 

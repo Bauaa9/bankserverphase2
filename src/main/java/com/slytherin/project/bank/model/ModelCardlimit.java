@@ -24,15 +24,45 @@ public class ModelCardlimit {
 	String totalcashlimit;
 	@Column(name="available_cash_limit")
 	String availablecashlimit;
+	@Column(name="previous_bill")
+	float previousBill;
+	@Column(name="min_due_percent")
+	float minDuePercent;
 	
 	public ModelCardlimit()
 	{
 		
 	}
 
+	
+
+	public float getPreviousBill() {
+		return previousBill;
+	}
+
+
+
+	public void setPreviousBill(float previousBill) {
+		this.previousBill = previousBill;
+	}
+
+
+
+	public float getMinDuePercent() {
+		return minDuePercent;
+	}
+
+
+
+	public void setMinDuePercent(float minDuePercent) {
+		this.minDuePercent = minDuePercent;
+	}
+
+
+
 	public ModelCardlimit(int card_limit_id, int card_id, String availablecreditlimit, String totalcreditlimit,
 			String rewardpoints, String laststatementdate, String paymentduedate, String totalcashlimit,
-			String availablecashlimit) {
+			String availablecashlimit, float previousBill, float minDuePercent) {
 		super();
 		this.card_limit_id = card_limit_id;
 		this.card_id = card_id;
@@ -43,7 +73,11 @@ public class ModelCardlimit {
 		this.paymentduedate = paymentduedate;
 		this.totalcashlimit = totalcashlimit;
 		this.availablecashlimit = availablecashlimit;
+		this.previousBill = previousBill;
+		this.minDuePercent = minDuePercent;
 	}
+
+
 
 	public int getCard_limit_id() {
 		return card_limit_id;

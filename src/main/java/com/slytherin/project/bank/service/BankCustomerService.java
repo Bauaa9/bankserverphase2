@@ -71,7 +71,7 @@ public class BankCustomerService {
 		String nextStatementDate = transactionDao.findNextStmtDate(obj1.getLaststatementdate());
 //		System.out.println(nextStatementDate);
 		List<ModelTransaction> modelTransaction = transactionDao.findUnBilledTransactions(obj1.getLaststatementdate(),
-				nextStatementDate);
+				nextStatementDate,obj.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
 //		Float totalOutstandingAmount = transactionDao.getTotalOutstandingAmount(obj1.getLaststatementdate(),
 //				nextStatementDate);

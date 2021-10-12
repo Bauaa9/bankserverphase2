@@ -11,8 +11,8 @@ import com.slytherin.project.bank.model.ModelTransaction;
 @Repository
 public interface TransactionDao extends JpaRepository<ModelTransaction, Integer>{
 
-	@Query(value="select trs_id,status,payment_method,merchant_name,date_time,amount,pg_ref_id from transactions where (Date(date_time) between ?1 and ?2)", nativeQuery=true)
-	public List<ModelTransaction> findUnBilledTransactions(String lastStmtDate,String nextStmtDate);
+	@Query(value="select trs_id,status,payment_method,merchant_name,date_time,amount,pg_ref_id from transactions where (Date(date_time) between ?1 and ?2) and ca_id=?3", nativeQuery=true)
+	public List<ModelTransaction> findUnBilledTransactions(String lastStmtDate,String nextStmtDate,int cardId);
 	
 	@Query(value="select DATE_ADD((DATE_ADD(?1, INTERVAL 1 MONTH)), INTERVAL -1 DAY)"
 			, nativeQuery=true)

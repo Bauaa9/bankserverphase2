@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.slytherin.project.bank.model.ModelInputCardDetails;
-import com.slytherin.project.bank.service.CustomerService;
+import com.slytherin.project.bank.service.BankCustomerService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class CustomerController {
 
 	@Autowired
-	CustomerService service;
+	BankCustomerService service;
 
 	@PostMapping("/bank-creditdetails")
 	public Map<String, Object> cardinfo(@RequestBody ModelInputCardDetails modelInputCardDetails) {

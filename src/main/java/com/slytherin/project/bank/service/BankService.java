@@ -1,7 +1,9 @@
 package com.slytherin.project.bank.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -151,8 +153,11 @@ public class BankService {
 		int customerId = cardRepository.findCustomerById(checkCard.getId());
 		
 		LocalTime time = LocalTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		String currentTime = time.format(formatter);
+		
+		  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+		   LocalDateTime now = LocalDateTime.now();  
+		   System.out.println();  
+		String currentTime = dtf.format(now);
 		
 		newTransaction.setAmount(paymentDetails.getTotalAmt());
 		newTransaction.setCard_id(checkCard.getId());

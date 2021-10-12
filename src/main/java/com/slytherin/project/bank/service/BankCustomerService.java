@@ -24,7 +24,7 @@ import com.slytherin.project.bank.model.ModelInputCardDetails;
 import com.slytherin.project.bank.model.ModelTransaction;
 
 @Service
-public class CustomerService {
+public class BankCustomerService {
 
 	@Autowired
 	CarddetailsRepo repoCardDetails;
@@ -35,39 +35,23 @@ public class CustomerService {
 	@Autowired
 	TransactionDao transactionDao;
 	
-	
-	private static SecretKeySpec secretKey;
-	private static byte[] key;
-	private static final String ALGORITHM = "AES";
-	private String secretkey = "slytherinNew1";
-	
-	public void prepareSecreteKey(String myKey) throws Exception {
-		MessageDigest sha = null;
-
-		key = myKey.getBytes(StandardCharsets.UTF_8);
-		sha = MessageDigest.getInstance("SHA-1");
-		key = sha.digest(key);
-		key = Arrays.copyOf(key, 16);
-		secretKey = new SecretKeySpec(key, ALGORITHM);
-
-	}
-	
-	public String decrypt(String strToDecrypt, String secret) throws Exception {
-
-		prepareSecreteKey(secret);
-		Cipher cipher = Cipher.getInstance(ALGORITHM);
-		cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
-
-	}
 
 	public Map<String, Object> creditcarddetails(ModelInputCardDetails modelInputCardDetails) throws Exception{
 		
 		CardDetails obj = repoCardDetails.findCard(modelInputCardDetails.getUserId(),
 				modelInputCardDetails.getCardId());
 		System.out.println(obj.getId());
-		ModelCard modelCard = new ModelCard();
-		obj.setCardNumber(modelCard.getCardNumber());
+//		ModelCard modelCard = new ModelCard();
+		UtilAES utilAES = new UtilAES();
+//		obj.setCardNumber(modelCard.getCardNumber());
+		
+		
+		obj.setCardNumber(utilAES.decrypt(obj.getCardNumber()));
+		obj.setCardHolderName(utilAES.decrypt(obj.getCardHolderName()));
+//		obj.setCardType(utilAES.decrypt(obj.getCardType()));
+		obj.setCvv(utilAES.decrypt(obj.getCvv()));
+		obj.setExpiryDate(utilAES.decrypt(obj.getExpiryDate()));
+		
 		ModelCardlimit obj1 = repoCardLimitDetails.findLimit(obj.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
 		double totaloutstanding = Double.valueOf(obj1.getTotalcreditlimit())
@@ -107,10 +91,13 @@ public class CustomerService {
 		ModelCardlimit obj1 = repoCardLimitDetails.findLimit(obj.getId());
 		System.out.println(obj1.getLaststatementdate());
 		String previousStatementDate = transactionDao.findPreviousStmtDate(obj1.getLaststatementdate());
+		System.out.println(previousStatementDate);
+
 		List<ModelTransaction> modelTransaction = transactionDao.findBilledTransactions(obj1.getLaststatementdate(),
 				previousStatementDate);
 		Map<String, Object> map = new HashMap<String, Object>();
 		Float totalAmountDue = transactionDao.getTotalAmountDue(obj1.getLaststatementdate(), previousStatementDate);
+		totalAmountDue = transactionDao.getTotalDeditAmount(obj1.getLaststatementdate(),previousStatementDate)-transactionDao.getTotalCreditAmount(obj1.getLaststatementdate(), previousStatementDate);
 		map.put("billedTxn", modelTransaction);
 		map.put("totalAmountDue", transactionDao.getTotalDeditAmount(obj1.getLaststatementdate(),previousStatementDate)-transactionDao.getTotalCreditAmount(obj1.getLaststatementdate(), previousStatementDate));
 		map.put("minAmountDue", (int) (totalAmountDue / 10));

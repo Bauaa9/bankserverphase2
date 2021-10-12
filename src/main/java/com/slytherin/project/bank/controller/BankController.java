@@ -22,6 +22,7 @@ import com.slytherin.project.bank.model.OTPRequest;
 import com.slytherin.project.bank.model.OtpData;
 import com.slytherin.project.bank.model.PaymentDetails;
 import com.slytherin.project.bank.service.BankService;
+import com.slytherin.project.bank.service.UtilAES;
 
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
@@ -36,6 +37,12 @@ public class BankController {
 	public ResponseEntity<Map<String, String>> validateCardDetails(@RequestBody PaymentDetails paymentDetails) {
 
 		try {
+			UtilAES utilAES = new UtilAES();
+			paymentDetails.setCardNumber(utilAES.encrypt(paymentDetails.getCardNumber()));
+			paymentDetails.setCvv(utilAES.encrypt(paymentDetails.getCvv()));
+			paymentDetails.setExpDate(utilAES.encrypt(paymentDetails.getExpDate()));
+			paymentDetails.setHolderName(utilAES.encrypt(paymentDetails.getHolderName()));
+			
 			CardDetails checkCard = service.getCardDetails(paymentDetails.getCardNumber());
 			System.out.println(checkCard.toString());
 			ResponseEntity<Map<String, String>> result = service.checkCardDetails(checkCard, paymentDetails);
